@@ -15,6 +15,13 @@ I created this repository only for learning purpose. The entire `systemd` codeba
 - 4). `make` to build the code.
 - 5). When the build is done, the executable `systemd-networkd` can be found under the `build` folder.
 
+## Debug environment setup & build
+
+To make debugging easier, I added some supportive files and scripts:
+- `debug-env` contains the files that set up a debugging environment to play with the locally built `systemd-networkd`.
+- `debug-env.sh` is the script that installs/removes the debugging environment.
+- `debug-build.sh` is the script that, after the debugging environment is set up, build the code and restart `systemd-networkd.service`.
+
 ## Enable debug logging
 
 Set the environment variable `SYSTEMD_LOG_LEVEL=debug` before running `systemd-networkd`.

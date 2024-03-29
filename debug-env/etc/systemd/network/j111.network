@@ -1,0 +1,8 @@
+[Match]
+Name=j111
+
+[Network]
+LinkLocalAddressing=no
+
+[Link]
+RequiredForOnline=no
