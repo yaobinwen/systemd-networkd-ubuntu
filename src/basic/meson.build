@@ -123,6 +123,8 @@ basic_sources = files('''
         lockfile-util.h
         log.c
         log.h
+        log-backtrace.c
+        log-backtrace.h
         login-util.c
         login-util.h
         macro.h
