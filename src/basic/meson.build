@@ -125,6 +125,8 @@ basic_sources = files('''
         log.h
         log-backtrace.c
         log-backtrace.h
+        log-gettid.c
+        log-gettid.h
         login-util.c
         login-util.h
         macro.h
