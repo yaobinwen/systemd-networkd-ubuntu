@@ -25,3 +25,7 @@ If you replace the real `systemd-networkd` with the version you built by yoursel
 [Service]
 Environment=SYSTEMD_LOG_LEVEL=debug
 ```
+
+## Entry point
+
+The entry point (i.e., the `main` function) is in `src/network/networkd.c`.
