@@ -12,7 +12,9 @@ I created this repository only for learning purpose. The entire `systemd` codeba
 - 2). `./install-deps.sh` to install the build dependencies.
   - Note I only tested this script on my machine so it may not install all the needed dependencies on your machine.
 - 3). `./configure` to generate the `build` folder.
+  - a). If you want to add more C flags, define the environment variable `CFLAGS`/`CXXFLAGS` before running `configure`. For example, `export CFLAGS=-rdynamic`. See [`configure`](./configure) for more details.
 - 4). `make` to build the code.
+  - a). If you want to display the actual `gcc` command line for debugging, define the environment variable `NINJA_VERBOSE` before running `make`. For example, `export NINJA_VERBOSE=1`. See [`Makefile`](./Makefile) for more details.
 - 5). When the build is done, the executable `systemd-networkd` can be found under the `build` folder.
 
 ## Debug environment setup & build
