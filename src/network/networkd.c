@@ -27,7 +27,9 @@
 #include "signal-util.h"
 #include "user-util.h"
 
-int main(int argc, char *argv[])
+// NOTE(ywen): Add this new main so I can find the main function quickly (as
+// there are many other main functions in this repo).
+int systemd_networkd_main(int argc, char *argv[])
 {
     sd_event *event = NULL;
     _cleanup_manager_free_ Manager *m = NULL;
@@ -181,4 +183,9 @@ out:
     sd_event_unref(event);
 
     return r < 0 ? EXIT_FAILURE : EXIT_SUCCESS;
+}
+
+int main(int argc, char *argv[])
+{
+    return systemd_networkd_main(argc, argv);
 }
