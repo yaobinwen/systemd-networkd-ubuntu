@@ -53,14 +53,24 @@ enum
     SD_EVENT_ONESHOT = -1
 };
 
+// NOTE(ywen): "sd-event" is really not just about one particular event. In fact, it represents the
+// event loop which is a state machine that handles events. This enum describes the different
+// states that the event loop can be in. See sd_event_wait(3).
 enum
 {
+    // NOTE(ywen): Event loop is ready to go for the next iteration.
     SD_EVENT_INITIAL,
+    // NOTE(ywen): Event loop has been prepared and no event sources were ready to be dispatched.
     SD_EVENT_ARMED,
+    // NOTE(ywen): There are event sources with events pending to be handled.
     SD_EVENT_PENDING,
+    // NOTE(ywen): A regular event source is currently being dispatched.
     SD_EVENT_RUNNING,
+    // NOTE(ywen): Similar to `SD_EVENT_RUNNING` but is the state in effect while dispatching exit event sources.
     SD_EVENT_EXITING,
+    // NOTE(ywen): The event loop has exited.
     SD_EVENT_FINISHED,
+    // NOTE(ywen): An event source is currently being prepared.
     SD_EVENT_PREPARING
 };
 

@@ -476,6 +476,7 @@ _public_ int sd_event_new(sd_event **ret)
     if (r < 0)
         goto fail;
 
+    // NOTE(ywen): Create the epoll instance.
     e->epoll_fd = epoll_create1(EPOLL_CLOEXEC);
     if (e->epoll_fd < 0)
     {
@@ -2726,11 +2727,22 @@ _public_ int sd_event_wait(sd_event *e, uint64_t timeout)
         return 1;
     }
 
+    // NOTE(ywen): Figure out the needed event buffer length.
     ev_queue_max = MAX(e->n_sources, 1u);
     ev_queue = newa(struct epoll_event, ev_queue_max);
 
-    m = epoll_wait(e->epoll_fd, ev_queue, ev_queue_max,
-                   timeout == (uint64_t)-1 ? -1 : (int)((timeout + USEC_PER_MSEC - 1) / USEC_PER_MSEC));
+    // NOTE(ywen): Wait for events on the epoll instance `e->epoll_fd` which was
+    // created in `sd_event_new`.
+    // NOTE(ywen): Per `epoll_wait`, `m` is the number of triggered events.
+    m = epoll_wait(
+        // NOTE(ywen): The epoll instance to wait for.
+        e->epoll_fd,
+        // NOTE(ywen): The buffer in which the triggered events are put.
+        ev_queue,
+        // NOTE(ywen): The maximum number of events to return.
+        ev_queue_max,
+        // NOTE(ywen): And the timeout of the waiting.
+        timeout == (uint64_t)-1 ? -1 : (int)((timeout + USEC_PER_MSEC - 1) / USEC_PER_MSEC));
     if (m < 0)
     {
         if (errno == EINTR)
@@ -2745,9 +2757,9 @@ _public_ int sd_event_wait(sd_event *e, uint64_t timeout)
 
     triple_timestamp_get(&e->timestamp);
 
+    // NOTE(ywen): Now we go through all the triggered events one by one.
     for (i = 0; i < m; i++)
     {
-
         if (ev_queue[i].data.ptr == INT_TO_PTR(SOURCE_WATCHDOG))
             r = flush_timer(e, e->watchdog_fd, ev_queue[i].events, NULL);
         else

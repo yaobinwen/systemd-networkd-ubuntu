@@ -432,15 +432,22 @@ static int process_running(sd_netlink *rtnl, sd_netlink_message **ret)
 
     assert(rtnl);
 
+    // NOTE(ywen): Check if any callbacks time out and handle them.
     r = process_timeout(rtnl);
     if (r != 0)
         goto null_message;
 
+    // NOTE(ywen): Get *one* queued message (but not process it yet). Try to
+    // read a message from the socket if the queue is empty.
     r = dispatch_rqueue(rtnl, &m);
     if (r < 0)
         return r;
     if (!m)
+    {
+        // NOTE(ywen): If we can't get any message anyway, then jump to the
+        // end to return.
         goto null_message;
+    }
 
     if (sd_netlink_message_is_broadcast(m))
     {
